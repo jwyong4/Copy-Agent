@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<Configuration status="INFO">
+    <Properties>
+		<Property name="LOG_PATTERN">[%d{MM-dd HH:mm:ss.SSS}] %-5p [%c{1.}] - %m%n</Property>
+        <Property name="LOG_DIR">${env:CP_AGENT_HOME}/logs</Property>
+        <Property name="LOG_NAME">/%d{yyyyMMdd-hhmm}_cp.log</Property>
+        <Property name="FS">${env:FS}</Property>
+    </Properties>
+    
+    <Appenders>
+        <Console name="Console_Appender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+        </Console>
+        
+        <RollingFile name="File_Appender" fileName="${LOG_DIR}${FS}cp.log" filePattern="${LOG_DIR}${FS}%d{yyyyMMdd-hhmm}_cp.log" append="true">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="1000KB"/>
+                <OnStartupTriggeringPolicy minSize="0"/>
+<!--                 <TimeBasedTriggeringPolicy interval="1"/> -->
+            </Policies>
+            <DefaultRolloverStrategy max="30" fileIndex="max"/>
+        </RollingFile>      
+    </Appenders>
+    
+    <Loggers>
+        <Root level="INFO" additivity="false">
+            <AppenderRef ref="Console_Appender"/>
+            <AppenderRef ref="File_Appender"/>
+        </Root>
+        <Logger name="com.program.copyAgent" level="INFO" additivity="false">
+            <AppenderRef ref="Console_Appender" />
+            <AppenderRef ref="File_Appender"/>
+        </Logger>
+    </Loggers>
+</Configuration>
